@@ -41,3 +41,20 @@ jobs:
           dockerfile: Dockerfile  # Path to the Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}  # Docker registry username from GitHub Secrets
           password: ${{ secrets.DOCKER_PASSWORD }}  # Docker registry password from GitHub Secrets
+
+  deploys:
+    needs: build  # 'deploys' job depends on 'build' job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to VM
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            docker pull sakiburrahman07/spring-boot-ci-cd:latest  # Match this to the image built in the 'build' job
+            docker stop spring-boot-ci-cd || true
+            docker rm spring-boot-ci-cd || true
+            docker run -d -p 80:80 --name spring-boot-ci-cd sakiburrahman07/spring-boot-ci-cd:latest  # Match image name
