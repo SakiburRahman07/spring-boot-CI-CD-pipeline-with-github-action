@@ -57,4 +57,4 @@ jobs:
             docker pull sakiburrahman07/spring-boot-ci-cd:latest  # Match this to the image built in the 'build' job
             docker stop spring-boot-ci-cd || true
             docker rm spring-boot-ci-cd || true
-            docker run -d -p 80:80 --name spring-boot-ci-cd sakiburrahman07/spring-boot-ci-cd:latest  # Match image name
+            docker run -d -p 8080:80 --name spring-boot-ci-cd sakiburrahman07/spring-boot-ci-cd:latest  # Match image name
